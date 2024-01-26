@@ -20,7 +20,6 @@ public class WigglyArm : MonoBehaviour
     [SerializeField] private LineRenderer lineRenderer;
 
     Vector3[] points; // For the line renderer
-    Vector3 targetPosition = new(); // For keeping track of the mouse
     List<Rigidbody2D> sections = new();
 
     private void Awake()
@@ -36,8 +35,6 @@ public class WigglyArm : MonoBehaviour
 
     private void Update()
     {
-        targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
         for (int i = 0; i < sections.Count; i++)
             points[i] = sections[i].position;
 
@@ -93,23 +90,21 @@ public class WigglyArm : MonoBehaviour
         hand.GetComponent<HingeJoint2D>().connectedBody = sections[sections.Count - 1];
     }
 
-    private void FixedUpdate()
-    {
-        //// Rotate each joint to point towards the mouse
-        //for (int i = 0; i < joints.Length; i++)
-        //{
-        //    // if (i > 0) return;
-        //    Vector3 directionToMouse3d = targetPosition - joints[i].transform.position;
-        //    directionToMouse3d.z = 0;// Prevents normalization issues
+    //private void FixedUpdate()
+    //{
+    //    //// Rotate each joint to point towards the mouse
+    //    //for (int i = 0; i < joints.Length; i++)
+    //    //{
+    //    //    // if (i > 0) return;
+    //    //    Vector3 directionToMouse3d = targetPosition - joints[i].transform.position;
+    //    //    directionToMouse3d.z = 0;// Prevents normalization issues
 
-        //    float angleError = Vector3.SignedAngle(directionToMouse3d.normalized, joints[i].transform.up, Vector3.forward);
-        //    //float angleError = GetAngleDifference(targetAngle, currentAngle);
-        //    float clampedTorque = Mathf.Min(maxTorque, Mathf.Abs(angleError * torque * Time.fixedDeltaTime)) * Mathf.Sign(angleError);
-        //    SetMotorSpeed(joints[i], clampedTorque);
-        //}
-
-        Movement.CalculateForce(targetPosition * torque, hand, maxTorque);
-    }
+    //    //    float angleError = Vector3.SignedAngle(directionToMouse3d.normalized, joints[i].transform.up, Vector3.forward);
+    //    //    //float angleError = GetAngleDifference(targetAngle, currentAngle);
+    //    //    float clampedTorque = Mathf.Min(maxTorque, Mathf.Abs(angleError * torque * Time.fixedDeltaTime)) * Mathf.Sign(angleError);
+    //    //    SetMotorSpeed(joints[i], clampedTorque);
+    //    //}
+    //}
 
     /// <summary>
     /// Because unity sucks sometimes with setting variables
@@ -127,7 +122,6 @@ public class WigglyArm : MonoBehaviour
         for (int i = 0; i < sections.Count; i++)
             Gizmos.DrawWireSphere(sections[i].transform.position, 0.2f);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(targetPosition, 0.2f);
     }
 
     private Vector3 VectorFromAngle(float angle)

@@ -24,16 +24,17 @@ public class Movement : MonoBehaviour
         if (isMoving)
         {
             targetVelocity.Normalize();
-            targetVelocity *= movementForce * Time.fixedDeltaTime;
+            targetVelocity *= movementForce;
         }
         else
             targetVelocity = Vector2.zero;
 
-        CalculateForce(targetVelocity, rb, maxForce);
+        rb.AddForce(targetVelocity * Time.fixedDeltaTime, ForceMode2D.Impulse); // GOT TO MOVE IT MOVE IT
+        //CalculateForce(targetVelocity, rb, maxForce);
 
         // Look in direction of movement
-        if (isMoving)
-            transform.rotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(Vector3.up, rb.velocity.normalized, Vector3.forward));
+        //if (isMoving)
+        //    transform.rotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(Vector3.up, rb.velocity.normalized, Vector3.forward));
     }
 
     public static void CalculateForce(Vector2 desiredVelocity, Rigidbody2D rb, float maxForce)
