@@ -1,0 +1,47 @@
+using UnityEngine;
+
+/// <summary>
+/// HA HA PHSYICS GO BRRR
+/// </summary>
+public class Movement : MonoBehaviour
+{
+    [SerializeField] private float movementForce = 10;
+    [SerializeField] private float maxForce = 10;
+    [SerializeField] private Rigidbody2D rb;
+
+
+    Vector2 targetVelocity = new();
+    bool isMoving;
+
+    private void Update() // FOR INPUT
+    {
+        targetVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")); // Get user input
+        isMoving = targetVelocity.magnitude > 0.2f;
+    }
+
+    void FixedUpdate() // FOR PHYSICS
+    {
+        if (isMoving)
+        {
+            targetVelocity.Normalize();
+            targetVelocity *= movementForce * Time.fixedDeltaTime;
+        }
+        else
+            targetVelocity = Vector2.zero;
+
+        CalculateForce(targetVelocity, rb, maxForce);
+
+        // Look in direction of movement
+        if (isMoving)
+            transform.rotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(Vector3.up, rb.velocity.normalized, Vector3.forward));
+    }
+
+    public static void CalculateForce(Vector2 desiredVelocity, Rigidbody2D rb, float maxForce)
+    {
+        Vector2 force = desiredVelocity - rb.velocity; // The missile knows where it is, because it knows where it isnt
+
+        force = force.normalized * Mathf.Min(force.magnitude, maxForce); // Cap the force
+
+        rb.AddForce(force, ForceMode2D.Impulse); // GOT TO MOVE IT MOVE IT
+    }
+}
