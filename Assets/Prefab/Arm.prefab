@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 1836030851199522361}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 0, y: 0.16, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3477945581961116846}
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0.4481132, b: 0.4481132, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 467cb26bb7da3674bae65fdf946688d1, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -134,10 +134,10 @@ MonoBehaviour:
   torque: 3
   maxTorque: 5
   sectionLength: 0.1
-  armLength: 2
+  armLength: 1
   sectionPrefab: {fileID: 364849702273867337, guid: dff172aaf560a644f924910fb6188014, type: 3}
   hand: {fileID: 1199365806926228401}
-  player: {fileID: 6848631196143784806}
+  shoulder: {fileID: 6848631196143784806}
   lineRenderer: {fileID: 8404414056592739591}
 --- !u!120 &8404414056592739591
 LineRenderer:
@@ -160,7 +160,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3359ed973a548ee4bba104dca355849b, type: 2}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -320,7 +320,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8588236, g: 0.43529415, b: 0.10588236, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -408,7 +408,7 @@ FixedJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.53, y: -0.01}
+  m_ConnectedAnchor: {x: -0.53, y: -0.01}
   m_DampingRatio: 0
   m_Frequency: 0
 --- !u!1 &8530601862243637242
@@ -424,6 +424,7 @@ GameObject:
   - component: {fileID: 6695616326140135341}
   - component: {fileID: 7455989874689952756}
   - component: {fileID: 2186549114499794078}
+  - component: {fileID: 3508586046504367325}
   m_Layer: 0
   m_Name: Hand
   m_TagString: Untagged
@@ -439,14 +440,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8530601862243637242}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8846750319151947340}
   m_Father: {fileID: 7039195033673390436}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1199365806926228401
 Rigidbody2D:
   serializedVersion: 4
@@ -506,9 +507,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.12}
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.12
 --- !u!233 &7455989874689952756
 HingeJoint2D:
   m_ObjectHideFlags: 0
@@ -524,8 +525,8 @@ HingeJoint2D:
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 0
-  m_Anchor: {x: 0, y: -0.2}
-  m_ConnectedAnchor: {x: 0, y: 0.2}
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0.1}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
@@ -548,4 +549,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementForce: 20
   maxForce: 10
+  input: {fileID: 3508586046504367325}
   rb: {fileID: 1199365806926228401}
+--- !u!114 &3508586046504367325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8530601862243637242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34394b59377f5dd438b496e27f4db643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  move: {x: 0, y: 0}
+  forward: 119
+  back: 115
+  right: 100
+  left: 97

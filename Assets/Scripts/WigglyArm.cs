@@ -5,8 +5,7 @@ using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
 /// <summary>
-/// A bunch of configurable joints end to end for the physics of the arm
-/// Rotates them to point towards the mouse
+/// The arm is made up of small 'sections' hinged together (hand at one end, shoulder at another
 /// </summary>
 public class WigglyArm : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class WigglyArm : MonoBehaviour
     [SerializeField] private float armLength = 5;
     [SerializeField] private GameObject sectionPrefab;
     [SerializeField] private Rigidbody2D hand;
-    [SerializeField] private Rigidbody2D player;
+    [SerializeField] private Rigidbody2D shoulder;
     [SerializeField] private LineRenderer lineRenderer;
 
     Vector3[] points; // For the line renderer
@@ -69,7 +68,7 @@ public class WigglyArm : MonoBehaviour
         sections.Add(firstSection.GetComponent<Rigidbody2D>());
 
         HingeJoint2D joint = firstSection.GetComponent<HingeJoint2D>();
-        joint.connectedBody = player;
+        joint.connectedBody = shoulder;
 
         for (int i = 1; i < count; i++)
         {

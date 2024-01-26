@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.Rendering.CoreUtils;
 
 /// <summary>
 /// HA HA PHSYICS GO BRRR
@@ -7,6 +8,7 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] private float movementForce = 10;
     [SerializeField] private float maxForce = 10;
+    [SerializeField] private Inputter input;
     [SerializeField] private Rigidbody2D rb;
 
 
@@ -15,7 +17,7 @@ public class Movement : MonoBehaviour
 
     private void Update() // FOR INPUT
     {
-        targetVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")); // Get user input
+        targetVelocity = input.move; // Get user input
         isMoving = targetVelocity.magnitude > 0.2f;
     }
 
@@ -44,5 +46,11 @@ public class Movement : MonoBehaviour
         force = force.normalized * Mathf.Min(force.magnitude, maxForce); // Cap the force
 
         rb.AddForce(force, ForceMode2D.Impulse); // GOT TO MOVE IT MOVE IT
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 0.2f);
     }
 }
