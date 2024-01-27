@@ -5,12 +5,14 @@ using static UnityEngine.Rendering.CoreUtils;
 /// <summary>
 /// HA HA PHSYICS GO BRRR
 /// </summary>
-public class NetworkedMovement : MonoBehaviourPunCallbacks
+public class NetworkedMovement : MonoBehaviour
 {
     [SerializeField] private float movementForce = 10;
     [SerializeField] private float maxForce = 10;
     [SerializeField] private Inputter input;
     [SerializeField] private Rigidbody2D rb;
+
+    [SerializeField] private PhotonView photonView;
 
 
     Vector2 targetVelocity = new();

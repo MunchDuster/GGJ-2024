@@ -334,6 +334,7 @@ MonoBehaviour:
   maxForce: 10
   input: {fileID: 4162397296217081742}
   rb: {fileID: 1862184547690371298}
+  photonView: {fileID: 2426609615787569248}
 --- !u!114 &943968228497859827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,6 +519,7 @@ MonoBehaviour:
   maxForce: 10
   input: {fileID: 2808069555428043994}
   rb: {fileID: 498849324440892342}
+  photonView: {fileID: 2426609615787569248}
 --- !u!114 &8120832053377313577
 MonoBehaviour:
   m_ObjectHideFlags: 0
