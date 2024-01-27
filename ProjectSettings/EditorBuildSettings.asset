@@ -25,7 +25,7 @@ EditorBuildSettings:
       for 4.unity
     guid: e7a7f9734636d415ca84ef3aaf7680f6
   - enabled: 1
-    path: Assets/Photon/PhotonUnityNetworking/Demos/PunBasics-Tutorial/Scenes/PunBasics-Lobby.unity
+    path: Assets/Photon/PhotonUnityNetworking/Demos/PunBasics-Tutorial/Scenes/PunBasics-Launcher.unity
     guid: 31d22f47530fc1b4299c2b6a718e8a19
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 2f0bb8a979b1070489930320d531dd21, type: 2}
