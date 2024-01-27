@@ -40,6 +40,10 @@ namespace Photon.Pun.Demo.PunBasics
         [SerializeField]
         private GameObject playerPrefab;
 
+
+        [Tooltip("The lobby level")]
+        [SerializeField]
+        private string lobbyLevelName = "NetworkLobby";
         #endregion
 
         #region MonoBehaviour CallBacks
@@ -54,7 +58,7 @@ namespace Photon.Pun.Demo.PunBasics
 			// in case we started this demo with the wrong scene being active, simply load the menu scene
 			if (!PhotonNetwork.IsConnected)
 			{
-				SceneManager.LoadScene("PunBasics-Launcher");
+				SceneManager.LoadScene(lobbyLevelName);
 
 				return;
 			}
@@ -118,12 +122,6 @@ namespace Photon.Pun.Demo.PunBasics
 		{
 			Debug.Log( "OnPlayerEnteredRoom() " + other.NickName); // not seen if you're the player connecting
 
-			if ( PhotonNetwork.IsMasterClient )
-			{
-				Debug.LogFormat( "OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient ); // called before OnPlayerLeftRoom
-
-				LoadArena();
-			}
 		}
 
 		/// <summary>
@@ -134,12 +132,6 @@ namespace Photon.Pun.Demo.PunBasics
 		{
 			Debug.Log( "OnPlayerLeftRoom() " + other.NickName ); // seen when other disconnects
 
-			if ( PhotonNetwork.IsMasterClient )
-			{
-				Debug.LogFormat( "OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient ); // called before OnPlayerLeftRoom
-
-				LoadArena(); 
-			}
 		}
 
 		/// <summary>
@@ -147,7 +139,7 @@ namespace Photon.Pun.Demo.PunBasics
 		/// </summary>
 		public override void OnLeftRoom()
 		{
-			SceneManager.LoadScene("PunBasics-Launcher");
+			SceneManager.LoadScene(lobbyLevelName);
 		}
 
 		#endregion
@@ -166,22 +158,6 @@ namespace Photon.Pun.Demo.PunBasics
 
 		#endregion
 
-		#region Private Methods
-
-		void LoadArena()
-		{
-			if ( ! PhotonNetwork.IsMasterClient )
-			{
-				Debug.LogError( "PhotonNetwork : Trying to Load a level but we are not the master Client" );
-				return;
-			}
-
-			Debug.LogFormat( "PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount );
-
-			PhotonNetwork.LoadLevel("PunBasics-Room for "+PhotonNetwork.CurrentRoom.PlayerCount);
-		}
-
-		#endregion
 
 	}
 
