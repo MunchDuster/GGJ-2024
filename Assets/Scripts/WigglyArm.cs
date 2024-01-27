@@ -1,3 +1,5 @@
+using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -7,7 +9,7 @@ using static UnityEngine.ParticleSystem;
 /// <summary>
 /// The arm is made up of small 'sections' hinged together (hand at one end, shoulder at another
 /// </summary>
-public class WigglyArm : MonoBehaviour
+public class WigglyArm : MonoBehaviour, IPunObservable
 {
     [SerializeField] private float torque = 5;
     [SerializeField] private float maxTorque = 5;
@@ -17,6 +19,8 @@ public class WigglyArm : MonoBehaviour
     [SerializeField] private Rigidbody2D hand;
     [SerializeField] private Rigidbody2D shoulder;
     [SerializeField] private LineRenderer lineRenderer;
+
+    [SerializeField] private PhotonView photonView;
 
     Vector3[] points; // For the line renderer
     List<Rigidbody2D> sections = new();
@@ -32,6 +36,11 @@ public class WigglyArm : MonoBehaviour
         lineRenderer.positionCount = points.Length;
     }
 
+    private bool IsMine()
+    {
+        return photonView.IsMine || !PhotonNetwork.IsConnected;
+    }
+
     private void Update()
     {
         for (int i = 0; i < sections.Count; i++)
@@ -42,8 +51,50 @@ public class WigglyArm : MonoBehaviour
         lineRenderer.SetPositions(points);
     }
 
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
+        {
+            stream.SendNext(points);
+        }
+        else
+        {
+            points = (Vector3[])stream.ReceiveNext();
+            if(points.Length != lineRenderer.positionCount)
+            {
+                lineRenderer.positionCount = points.Length;
+            }
+            lineRenderer.SetPositions(points);
+            UpdateSections();
+        }
+    }
+
+    private void UpdateSections()
+    {
+        if(points.Length != sections.Count+1)
+        {
+            ClearSections();
+            PopulateSections(points.Length - 1);
+            sections.Last().position = points[points.Length - 2];
+            JoinHand();
+        }
+
+        for(int i = 0; i < sections.Count; i++)
+        {
+            sections[i].position = points[i];
+        }
+    }
+
+
     public void SetLength(float length)
     {
+        if(!IsMine())
+        {
+            Debug.LogError("Set length on remote controlled character");
+            return;
+        }
+
         ClearSections();
         PopulateSections(Mathf.RoundToInt(length / sectionLength));
         JoinHand();
