@@ -27,7 +27,6 @@ public class ManageHealth : MonoBehaviour, IPunObservable
         if (dead)
             return;
 
-        hasChanged = true;
         health -= damage;
         RefreshHealth();
 
@@ -58,10 +57,9 @@ public class ManageHealth : MonoBehaviour, IPunObservable
             health = (float)stream.ReceiveNext();
             RefreshHealth();
         }
-        else if(hasChanged)
+        else
         {
             stream.SendNext(health);
-            hasChanged = false;
         }
     }
 }

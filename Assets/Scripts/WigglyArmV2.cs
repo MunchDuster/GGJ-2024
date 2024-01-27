@@ -25,7 +25,8 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
 
     public PhotonView photonView;
 
-    
+
+    Vector2[] deserializePoints;
     Vector3[] points; // For the line renderer
     public List<Rigidbody2D> arm = new();
     public List<Rigidbody2D> extension = new();
@@ -40,6 +41,8 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
         maxExtensionItems = Mathf.CeilToInt(maxExtensionPhysicalLength / sectionLength);
         SetupArm();
         InitLineRenderer();
+
+        deserializePoints = new Vector2[maxExtensionItems];
     }
 
     private void InitLineRenderer()
@@ -87,23 +90,27 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
     {
         if(stream.IsWriting)
         {
-            stream.SendNext(arm.Select(e => e.position).ToArray());
+            for (int i = 0; i < armItems; i++)
+                stream.SendNext(arm[i].position);
             stream.SendNext(actualExtensionItems);
-            if(actualExtensionItems > 0)
-                stream.SendNext(extension.Take(actualExtensionItems).Select(e => e.position).ToArray());
+            for (int i = 0; i < actualExtensionItems; i++)
+                stream.SendNext(extension[i].position);
             stream.SendNext(hand.position);
         }
         else
         {
-            var armPositions = (Vector2[])stream.ReceiveNext();
-         
-            for (int i = 0; i < armPositions.Length; i++)
-                arm[i].position = armPositions[i];
+            for (int i = 0; i < armItems; i++)
+                arm[i].position = (Vector2)stream.ReceiveNext();
 
             var newExtensionItems = (int)stream.ReceiveNext();
-            var extensionPositions = newExtensionItems > 0 ? (Vector2[])stream.ReceiveNext() : null;
+            
+            for(int i = 0; i < newExtensionItems; i++)
+            {
+                deserializePoints[i] = (Vector2)stream.ReceiveNext();
+            }
+
             var handPos = (Vector2)stream.ReceiveNext(); 
-            UpdateExtensionLinkage(newExtensionItems, extensionPositions, handPos);
+            UpdateExtensionLinkage(newExtensionItems, deserializePoints, handPos);
 
             UpdateLineRenderer();
         }
