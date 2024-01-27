@@ -43,10 +43,10 @@ public class ManageHealth : MonoBehaviour, IPunObservable
     private void RefreshHealth()
     {
         float healthPercent = health / maxHealth;
-        fill.localScale = new Vector3(healthPercent, 1, 1);
-
-        float newX = -0.5f + (healthPercent / 2f);
-        fill.localPosition = new Vector3(newX, 0, 0);
+        
+        // Make the fill the correct size and placement
+        fill.localScale = new Vector3(1, healthPercent, 1);
+        fill.localPosition = new Vector3(0,  -0.5f + (healthPercent / 2f), 0);
 
         renderer.color = Color.Lerp(startColor, endColor, healthPercent); // Interpolate color from white to orange
     }
@@ -54,7 +54,10 @@ public class ManageHealth : MonoBehaviour, IPunObservable
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsReading)
+        {
             health = (float)stream.ReceiveNext();
+            RefreshHealth();
+        }
         else if(hasChanged)
         {
             stream.SendNext(health);

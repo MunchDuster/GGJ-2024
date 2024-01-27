@@ -131,8 +131,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5465e2fd274ab54383f3704ef0f94ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  torque: 3
-  maxTorque: 5
   sectionLength: 0.1
   armLength: 1
   sectionPrefab: {fileID: 364849702273867337, guid: dff172aaf560a644f924910fb6188014, type: 3}
@@ -444,6 +442,7 @@ GameObject:
   - component: {fileID: 7455989874689952756}
   - component: {fileID: 3508586046504367325}
   - component: {fileID: 7420728978601767726}
+  - component: {fileID: 5030542329576583244}
   m_Layer: 0
   m_Name: Hand
   m_TagString: Untagged
@@ -587,3 +586,20 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &5030542329576583244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8530601862243637242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 196f77e4941931a45b3e225dc826d712, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myPlayer: {fileID: 0}
+  photonView: {fileID: 0}
+  playerTag: Player
+  damagePerTickle: 0.2
+  cooldown: 0.2

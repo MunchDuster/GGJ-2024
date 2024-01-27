@@ -8,11 +8,6 @@ public class SpringAttack : MonoBehaviour
     [SerializeField] private float time;
     [SerializeField] private WigglyArm[] arms;
 
-    private void Start()
-    {
-        Screen.SetResolution(640, 480, FullScreenMode.MaximizedWindow, 30);
-    }
-
     // Update is called once per frame
     void Update()
     {
