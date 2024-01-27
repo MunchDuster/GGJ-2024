@@ -126,11 +126,17 @@ namespace Photon.Pun.Demo.PunBasics
 			}
 		}
 
-		/// <summary>
-		/// Logs the feedback in the UI view for the player, as opposed to inside the Unity Editor for the developer.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		void LogFeedback(string message)
+        public void Quit()
+        {
+            Application.Quit();
+        }
+
+
+        /// <summary>
+        /// Logs the feedback in the UI view for the player, as opposed to inside the Unity Editor for the developer.
+        /// </summary>
+        /// <param name="message">Message.</param>
+        void LogFeedback(string message)
 		{
 			// we do not assume there is a feedbackText defined.
 			if (feedbackText == null) {
