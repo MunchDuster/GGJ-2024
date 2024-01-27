@@ -9,14 +9,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 namespace Photon.Pun.Demo.PunBasics
 {
 	/// <summary>
 	/// Player name input field. Let the user input his name, will appear above the player in the game.
 	/// </summary>
-	[RequireComponent(typeof(InputField))]
 	public class PlayerNameInputField : MonoBehaviour
 	{
 		#region Private Constants
@@ -34,7 +33,7 @@ namespace Photon.Pun.Demo.PunBasics
 		void Start () {
 		
 			string defaultName = string.Empty;
-			InputField _inputField = this.GetComponent<InputField>();
+            TMP_InputField _inputField = this.GetComponent<TMP_InputField>();
 
 			if (_inputField!=null)
 			{
