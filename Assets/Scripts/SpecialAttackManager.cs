@@ -9,6 +9,7 @@ public class SpecialAttackManager : MonoBehaviour
 
     ISpecialAttack currentAttack = null;
     float retractTime = 0.0f;
+    float attackTime = 0.0f;
     float currentAttackTime = 0.0f;
     float currentRetractTime = 0.0f;
     Vector2 lastPosition;
@@ -39,54 +40,84 @@ public class SpecialAttackManager : MonoBehaviour
             return;
         }
 
-        if(currentAttack.AttackIsDone())
+        if(currentAttack.AttackIsDone() || currentAttackTime >= attackTime)
         {
             currentRetractTime += Time.deltaTime;
-            float percent = Time.deltaTime * currentRetractTime / retractTime;
+            float percent = currentRetractTime / retractTime;
+            percent = Mathf.Clamp01(percent);
+
+            Debug.Log($"Doing retract {percent * 100}% ({currentRetractTime} / {retractTime}");
             int targetItems = (int)((1.0f - percent) * finalLength);
             RetractAttack(targetItems);
+
+            if(targetItems == 0)
+            {
+                currentAttack = null;
+            }
+
         } 
         else
         {
+            Debug.Log("Doing attack");
             currentAttackTime += Time.deltaTime;
-            var next = currentAttack.NextPosition(lastPosition, lastDirection, currentAttackTime);
+            float percent = currentAttackTime / attackTime;
+            percent = Mathf.Clamp01(percent);
+            lastPosition = wiggleArm.hand.position;
+            lastDirection = wiggleArm.hand.transform.up.normalized;
+            var next = currentAttack.NextPosition(lastPosition, lastDirection, percent);
             LinkAttackToNext(next);
         }
     }
 
     private void RetractAttack(int targetItems)
     {
-        if(targetItems >= wiggleArm.actualExtensionItems)
+        Debug.Log($"Retracting to {targetItems} from {wiggleArm.actualExtensionItems}");
+        if (targetItems >= wiggleArm.actualExtensionItems)
         {
             return;
         }
         var newItems = wiggleArm.extension.Take(targetItems).Select(e => e.position);
         wiggleArm.UpdateExtensionLinkage(targetItems, newItems.ToArray(), wiggleArm.extension[targetItems].position);
+
+        Debug.Log($"Retracted list is {wiggleArm.extension}");
     }
 
     private void LinkAttackToNext(Vector2 next)
     {
-        var distance = (next - lastPosition).magnitude;
-        var numSections = Mathf.CeilToInt(distance / wiggleArm.sectionLength);
+        Vector2 diff = next - lastPosition;
+        var distance = diff.magnitude;
+        var dir = diff.normalized;
+        if( distance < wiggleArm.sectionLength )
+        {
+            return; // Already close enough
+        }
 
-        if(finalLength + numSections >= wiggleArm.maxExtensionItems)
+        var numSections = Mathf.CeilToInt(distance / wiggleArm.sectionLength);
+        Debug.Log($"Linking attack from {lastPosition} to {next} in {numSections}");
+
+        if (finalLength + numSections >= wiggleArm.maxExtensionItems)
         {
             currentAttack.MaxReached();
             numSections = wiggleArm.maxExtensionItems - finalLength;
         }
         finalLength += numSections;
 
+        
         Vector2[] points = new Vector2[numSections];
         for(int i = 0; i < numSections; i++)
         {
-            points[i] = Vector2.Lerp(lastPosition, next, i / numSections);
+            points[i] = lastPosition + dir * wiggleArm.sectionLength * i;
         }
+        next = lastPosition + dir * wiggleArm.sectionLength * numSections;
 
         lastDirection = wiggleArm.hand.transform.up;
         lastPosition = next;
 
-        wiggleArm.UpdateExtensionLinkage(finalLength, points, next);
+        Vector2[] allPoints = wiggleArm.extension.Select(e => e.position).Concat(points).ToArray();
+        wiggleArm.UpdateExtensionLinkage(finalLength, allPoints, next);
+        wiggleArm.UpdateLineRenderer();
     }
+
 
     public bool LaunchSpecialAttack(ISpecialAttack attack)
     {
@@ -97,10 +128,13 @@ public class SpecialAttackManager : MonoBehaviour
 
         currentAttack = attack;
         currentAttackTime = 0.0f;
+        attackTime = currentAttack.GetTotalAttackTime();
         retractTime = currentAttack.GetRetractTime();
         finalLength = 0;
+        lastPosition = wiggleArm.hand.position;
+        lastDirection = wiggleArm.hand.transform.up.normalized;
 
-        currentAttack.StartAttack(wiggleArm.hand.position, wiggleArm.hand.transform.up.normalized);
+        currentAttack.StartAttack(lastPosition, lastDirection);
         return true;
     }
 
@@ -135,19 +169,22 @@ public class SpecialAttackManager : MonoBehaviour
 
         public void MaxReached()
         {
-            currentPosition = targetPosition;
+            // Override target with the current position 
+            targetPosition = currentPosition;
         }
 
         public Vector2 NextPosition(Vector2 currentPosition, Vector2 currentDirection, float time)
         {
-            return Vector2.Lerp(startPosition, targetPosition, time);
+            Debug.Log($"Lerping between {startPosition}  and {targetPosition}, currently at {currentPosition} at percentage {time * 100}");
+            this.currentPosition = Vector2.Lerp(startPosition, targetPosition, time );
+            return this.currentPosition;
         }
 
         public void StartAttack(Vector2 startPosition, Vector2 startDirection)
         {
             this.startPosition = startPosition;
-            this.targetPosition = startDirection + startDirection * totalDistance;
-            currentPosition = startPosition;
+            this.targetPosition = startPosition + startDirection * totalDistance;
+            this.currentPosition = startPosition;
         }
     };
 

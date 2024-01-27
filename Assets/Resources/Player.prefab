@@ -182,7 +182,7 @@ MonoBehaviour:
   - {fileID: 6464412883321151471}
   - {fileID: 8037086480626696317}
   - {fileID: 5083930041778222267}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &2339498154383008640
@@ -457,7 +457,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementForce: 20
-  maxForce: 10
   input: {fileID: 4162397296217081742}
   rb: {fileID: 1862184547690371298}
   photonView: {fileID: 2426609615787569248}
@@ -672,7 +671,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementForce: 20
-  maxForce: 10
   input: {fileID: 2808069555428043994}
   rb: {fileID: 498849324440892342}
   photonView: {fileID: 2426609615787569248}

@@ -12,8 +12,6 @@ using static UnityEngine.Rendering.CoreUtils;
 /// </summary>
 public class WigglyArm : MonoBehaviour, IPunObservable
 {
-    [SerializeField] private float torque = 5;
-    [SerializeField] private float maxTorque = 5;
     [SerializeField] private float sectionLength = 0.2f;
     [SerializeField] private float armLength = 5;
     [SerializeField] private GameObject sectionPrefab;

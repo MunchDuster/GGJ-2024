@@ -7,7 +7,7 @@ using UnityEngine;
 public class NetworkedMovement : MonoBehaviour
 {
     [SerializeField] private float movementForce = 10;
-    [SerializeField] private float maxForce = 10;
+    //[SerializeField] private float maxForce = 10;
     [SerializeField] private Inputter input;
     [SerializeField] private Rigidbody2D rb;
 

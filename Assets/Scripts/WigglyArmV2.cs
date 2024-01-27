@@ -44,8 +44,8 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
 
     private void InitLineRenderer()
     {
-        points = new Vector3[armItems + maxExtensionItems + 2/*for the hand*/];
-        lineRenderer.positionCount = points.Length;
+        points = new Vector3[armItems + maxExtensionItems + 2/*for the hand*/ + 1 /* trailing zero */];
+        lineRenderer.positionCount = armItems;
     }
 
     private bool IsMine()
@@ -58,19 +58,25 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
         UpdateLineRenderer();
     }
 
-    private void UpdateLineRenderer()
+    public void UpdateLineRenderer()
     {
         for (int i = 0; i < armItems; i++)
-            points[i] = arm[i].position;
+            points[i] = arm[i].transform.position;
 
         for(int i = 0; i < actualExtensionItems; i++)
-            points[i + armItems] = extension[i].position;
+            points[i + armItems] = extension[i].transform.position;
 
         int totalLength = armItems + actualExtensionItems;
 
         //Hand points
-        points[totalLength] = hand.position;
-        points[totalLength + 1] = hand.position + (Vector2)hand.transform.up * sectionLength;
+        points[totalLength] = hand.transform.position;
+        points[totalLength + 1] = hand.transform.position + hand.transform.up * sectionLength;
+        points[totalLength + 2] = Vector3.zero;
+
+        if (actualExtensionItems > 0)
+        {
+            Debug.Log($"Line renderer has points {points}");
+        }
 
         lineRenderer.positionCount = totalLength + 2;
         lineRenderer.SetPositions(points);
@@ -113,23 +119,25 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
         }
 
         Rigidbody2D last = currentItems == 0 ? arm.Last() : extension[currentItems - 1];
-        if (newItems > actualExtensionItems)
+        if ( currentItems < newItems )
         {
             for (int i = currentItems; i < newItems; i++)
             {
                 last = CreateAndLinkSection(extension, last, positions[i]);
+                last.drag = 1.0f; // Add drag for extension to make it less sensitive
             }
         } 
         else if( currentItems < actualExtensionItems )
         {
-            for(int i = currentItems; i < newItems; i++)
+            for(int i = currentItems; i < actualExtensionItems; i++)
             {
                 DestroySection(extension[i]);
                 extension[i] = null;
             }
-            extension.RemoveRange(currentItems, newItems - currentItems);
+            extension.RemoveRange(currentItems, actualExtensionItems - currentItems);
         }
         LinkHand(last, handPos);
+        actualExtensionItems = newItems;
     }
 
     public void SetupArm()
@@ -165,7 +173,7 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
 
     private Rigidbody2D CreateAndLinkSection(List<Rigidbody2D> list, Rigidbody2D last, Vector2 position)
     {
-        var next = CreateSection(arm, position);
+        var next = CreateSection(list, position);
         LinkSection(last, next);
         return next;
     }
@@ -175,6 +183,8 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
         Debug.Log($"Add section at position {position}");
         GameObject newSection = Instantiate(sectionPrefab, transform);
         newSection.transform.position = position;
+
+        newSection.name = (list == arm ? "Arm " : "Extension ") + list.Count.ToString();
 
         Rigidbody2D newRigidbody = newSection.GetComponent<Rigidbody2D>();
         list.Add(newRigidbody);
