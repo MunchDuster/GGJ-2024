@@ -121,7 +121,7 @@ public class SpecialAttackManager : MonoBehaviour
 
     public bool LaunchSpecialAttack(ISpecialAttack attack)
     {
-        if(currentAttack != null)
+        if(currentAttack != null || !wiggleArm.photonView.IsMine)
         {
             return false;
         }

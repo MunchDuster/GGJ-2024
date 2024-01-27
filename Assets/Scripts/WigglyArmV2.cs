@@ -23,7 +23,7 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
     [SerializeField] private Rigidbody2D shoulder;
     [SerializeField] private LineRenderer lineRenderer;
 
-    [SerializeField] private PhotonView photonView;
+    public PhotonView photonView;
 
     
     Vector3[] points; // For the line renderer
@@ -89,7 +89,8 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
         {
             stream.SendNext(arm.Select(e => e.position).ToArray());
             stream.SendNext(actualExtensionItems);
-            stream.SendNext(extension.Take(actualExtensionItems).Select(e => e.position));
+            if(actualExtensionItems > 0)
+                stream.SendNext(extension.Take(actualExtensionItems).Select(e => e.position).ToArray());
             stream.SendNext(hand.position);
         }
         else
@@ -100,7 +101,7 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
                 arm[i].position = armPositions[i];
 
             var newExtensionItems = (int)stream.ReceiveNext();
-            var extensionPositions = (Vector2[])stream.ReceiveNext();
+            var extensionPositions = newExtensionItems > 0 ? (Vector2[])stream.ReceiveNext() : null;
             var handPos = (Vector2)stream.ReceiveNext(); 
             UpdateExtensionLinkage(newExtensionItems, extensionPositions, handPos);
 
@@ -142,12 +143,6 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
 
     public void SetupArm()
     {
-        if(!IsMine())
-        {
-            Debug.LogError("Set length on remote controlled character");
-            return;
-        }
-
         Debug.Log($"Making {armItems} sections");
 
         Rigidbody2D last = shoulder;
