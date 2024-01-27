@@ -182,7 +182,7 @@ MonoBehaviour:
   - {fileID: 6464412883321151471}
   - {fileID: 8037086480626696317}
   - {fileID: 5083930041778222267}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &2339498154383008640
@@ -337,6 +337,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3075141523569722383, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       insertIndex: 1
       addedObject: {fileID: 3277536244031453451}
+    - targetCorrespondingSourceObject: {fileID: 3075141523569722383, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 5066608345157947639}
     - targetCorrespondingSourceObject: {fileID: 8530601862243637242, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       insertIndex: 4
       addedObject: {fileID: 7883476677486594812}
@@ -372,6 +375,22 @@ MonoBehaviour:
   shoulder: {fileID: 6231284150567378997}
   lineRenderer: {fileID: 9065944152282938964}
   photonView: {fileID: 2426609615787569248}
+  arm: []
+  extension: []
+  maxExtensionItems: 0
+  actualExtensionItems: 0
+--- !u!114 &5066608345157947639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2585020892873848668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bed80b480545ab14996a865afbaaf38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4162397296217081742 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
@@ -554,6 +573,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3075141523569722383, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       insertIndex: 1
       addedObject: {fileID: 1520944425033987528}
+    - targetCorrespondingSourceObject: {fileID: 3075141523569722383, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 8998245521294436263}
     - targetCorrespondingSourceObject: {fileID: 8530601862243637242, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       insertIndex: 4
       addedObject: {fileID: 8588456449699899134}
@@ -600,6 +622,22 @@ MonoBehaviour:
   shoulder: {fileID: 5278919977052097377}
   lineRenderer: {fileID: 7127859038564046080}
   photonView: {fileID: 2426609615787569248}
+  arm: []
+  extension: []
+  maxExtensionItems: 0
+  actualExtensionItems: 0
+--- !u!114 &8998245521294436263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4387734078875835400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bed80b480545ab14996a865afbaaf38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &5278919977052097377 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 6848631196143784806, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}

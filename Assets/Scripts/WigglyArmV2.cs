@@ -12,8 +12,8 @@ using static UnityEngine.Rendering.CoreUtils;
 /// </summary>
 public class WigglyArmV2 : MonoBehaviour, IPunObservable
 {
-    [SerializeField] private float sectionLength = 0.2f;
-    [SerializeField] private float armPhysicalLength = 5;
+    public float sectionLength = 0.2f;
+    public float armPhysicalLength = 5;
 
     [SerializeField] private float maxExtensionPhysicalLength = 15;
 
@@ -27,12 +27,12 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
 
     
     Vector3[] points; // For the line renderer
-    List<Rigidbody2D> arm = new();
-    List<Rigidbody2D> extension = new();
+    public List<Rigidbody2D> arm = new();
+    public List<Rigidbody2D> extension = new();
 
     private int armItems;
-    private int maxExtensionItems;
-    private int actualExtensionItems = 0;
+    public int maxExtensionItems;
+    public int actualExtensionItems = 0;
 
     private void Start()
     {
@@ -76,6 +76,7 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
         lineRenderer.SetPositions(points);
     }
 
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if(stream.IsWriting)
@@ -101,7 +102,7 @@ public class WigglyArmV2 : MonoBehaviour, IPunObservable
         }
     }
 
-    private void UpdateExtensionLinkage(int newItems, Vector2[] positions, Vector2 handPos)
+    public void UpdateExtensionLinkage(int newItems, Vector2[] positions, Vector2 handPos)
     {
         Debug.Log($"Updating extension length to {newItems}");
 
