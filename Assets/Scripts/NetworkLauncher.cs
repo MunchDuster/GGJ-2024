@@ -9,7 +9,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 using Photon.Realtime;
 
@@ -31,7 +31,7 @@ namespace Photon.Pun.Demo.PunBasics
 
 		[Tooltip("The Ui Text to inform the user about the connection progress")]
 		[SerializeField]
-		private Text feedbackText;
+		private TextMeshProUGUI feedbackText;
 
 		[Tooltip("The maximum number of players per room")]
 		[SerializeField]
