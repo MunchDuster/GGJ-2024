@@ -1,6 +1,5 @@
 using Photon.Pun;
 using UnityEngine;
-using static UnityEngine.Rendering.CoreUtils;
 
 /// <summary>
 /// HA HA PHSYICS GO BRRR

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
+using static UnityEngine.Rendering.CoreUtils;
 
 /// <summary>
 /// The arm is made up of small 'sections' hinged together (hand at one end, shoulder at another
@@ -16,7 +17,8 @@ public class WigglyArm : MonoBehaviour, IPunObservable
     [SerializeField] private float sectionLength = 0.2f;
     [SerializeField] private float armLength = 5;
     [SerializeField] private GameObject sectionPrefab;
-    [SerializeField] private Rigidbody2D hand;
+    [SerializeField] private Transform player;
+    public Rigidbody2D hand;
     [SerializeField] private Rigidbody2D shoulder;
     [SerializeField] private LineRenderer lineRenderer;
 
@@ -30,9 +32,11 @@ public class WigglyArm : MonoBehaviour, IPunObservable
         SetLength(armLength);
     }
 
+    public float GetLength() => armLength;
+
     private void InitLineRenderer()
     {
-        points = new Vector3[sections.Count + 1/*for the hand*/];
+        points = new Vector3[sections.Count + 2/*for the hand*/];
         lineRenderer.positionCount = points.Length;
     }
 
@@ -43,49 +47,53 @@ public class WigglyArm : MonoBehaviour, IPunObservable
 
     private void Update()
     {
+        UpdateLineRenderer();
+    }
+
+    private void UpdateLineRenderer()
+    {
         for (int i = 0; i < sections.Count; i++)
             points[i] = sections[i].position;
 
-        points[points.Length - 1] = hand.position;
+        //Hand points
+        points[points.Length - 2] = hand.position;
+        points[points.Length - 1] = hand.position + (Vector2)hand.transform.up * 0.2f;
 
         lineRenderer.SetPositions(points);
     }
-
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if(stream.IsWriting)
         {
-            stream.SendNext(points);
+            stream.SendNext(sections.Select(section => section.position).ToArray());
         }
         else
         {
-            points = (Vector3[])stream.ReceiveNext();
-            if(points.Length != lineRenderer.positionCount)
-            {
-                lineRenderer.positionCount = points.Length;
-            }
-            lineRenderer.SetPositions(points);
-            UpdateSections();
+            var sectionPositions = (Vector2[])stream.ReceiveNext();
+
+            if (sectionPositions.Length != sections.Count)
+                AdjustSectionCount(sectionPositions); // Add/Remove missing sections and update line renderer
+
+            for (int i = 0; i < sectionPositions.Length; i++)
+                sections[i].position = sectionPositions[i];
+
+            UpdateLineRenderer();
         }
     }
 
-    private void UpdateSections()
+    private void AdjustSectionCount(Vector2[] sectionPositions)
     {
-        if(points.Length != sections.Count+1)
-        {
-            ClearSections();
-            PopulateSections(points.Length - 1);
-            sections.Last().position = points[points.Length - 2];
-            JoinHand();
-        }
+        if (sectionPositions.Length > sections.Count)
+            for (int i = 0; i < sectionPositions.Length - sections.Count; i++)
+                CreateSection();
+        else
+            for (int i = 0; i < sections.Count - sectionPositions.Length; i++)
+                DeleteEndSection();
 
-        for(int i = 0; i < sections.Count; i++)
-        {
-            sections[i].position = points[i];
-        }
+        JoinHand();
+        InitLineRenderer();
     }
-
 
     public void SetLength(float length)
     {
@@ -105,10 +113,13 @@ public class WigglyArm : MonoBehaviour, IPunObservable
     {
         int originalCount = sections.Count;
         for (int i = 0; i < originalCount; i++)
-        {
-            Destroy(sections[0]);
-            sections.RemoveAt(0);
-        }
+            DeleteEndSection();
+    }
+
+    private void DeleteEndSection()
+    {
+        Destroy(sections[sections.Count - 1].gameObject);
+        sections.RemoveAt(sections.Count - 1);
     }
 
     private void PopulateSections(int count)
@@ -122,48 +133,27 @@ public class WigglyArm : MonoBehaviour, IPunObservable
         joint.connectedBody = shoulder;
 
         for (int i = 1; i < count; i++)
-        {
-            GameObject newSection = Instantiate(sectionPrefab, transform);
-            sections.Add(newSection.GetComponent<Rigidbody2D>());
+            CreateSection();
+    }
 
-            // Connecting this joint to the last
+    private void CreateSection()
+    {
+        GameObject newSection = Instantiate(sectionPrefab, transform);
+        sections.Add(newSection.GetComponent<Rigidbody2D>());
 
-            joint = newSection.GetComponent<HingeJoint2D>();
-            joint.connectedBody = sections[i - 1];
-            newSection.transform.position = sections[i - 1].position + Vector2.up * sectionLength;
-        }
+        // Connecting this joint to the last
+        if (sections.Count < 2)
+            return;
+
+        HingeJoint2D joint = newSection.GetComponent<HingeJoint2D>();
+        joint.connectedBody = sections[sections.Count - 2];
+        newSection.transform.position = sections[sections.Count - 2].position + (Vector2)player.up * sectionLength;
     }
 
     private void JoinHand()
     {
         hand.transform.position = sections[sections.Count - 1].position + Vector2.up * sectionLength;
         hand.GetComponent<HingeJoint2D>().connectedBody = sections[sections.Count - 1];
-    }
-
-    //private void FixedUpdate()
-    //{
-    //    //// Rotate each joint to point towards the mouse
-    //    //for (int i = 0; i < joints.Length; i++)
-    //    //{
-    //    //    // if (i > 0) return;
-    //    //    Vector3 directionToMouse3d = targetPosition - joints[i].transform.position;
-    //    //    directionToMouse3d.z = 0;// Prevents normalization issues
-
-    //    //    float angleError = Vector3.SignedAngle(directionToMouse3d.normalized, joints[i].transform.up, Vector3.forward);
-    //    //    //float angleError = GetAngleDifference(targetAngle, currentAngle);
-    //    //    float clampedTorque = Mathf.Min(maxTorque, Mathf.Abs(angleError * torque * Time.fixedDeltaTime)) * Mathf.Sign(angleError);
-    //    //    SetMotorSpeed(joints[i], clampedTorque);
-    //    //}
-    //}
-
-    /// <summary>
-    /// Because unity sucks sometimes with setting variables
-    /// </summary>
-    private void SetMotorSpeed(HingeJoint2D joint, float speed)
-    {
-        JointMotor2D motor = joint.motor;
-        motor.motorSpeed = speed;
-        joint.motor = motor;
     }
 
     private void OnDrawGizmos()
@@ -173,7 +163,4 @@ public class WigglyArm : MonoBehaviour, IPunObservable
             Gizmos.DrawWireSphere(sections[i].transform.position, 0.2f);
         Gizmos.color = Color.red;
     }
-
-    private Vector3 VectorFromAngle(float angle)
-        => new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0);
 }

@@ -136,9 +136,11 @@ MonoBehaviour:
   sectionLength: 0.1
   armLength: 1
   sectionPrefab: {fileID: 364849702273867337, guid: dff172aaf560a644f924910fb6188014, type: 3}
+  player: {fileID: 0}
   hand: {fileID: 1199365806926228401}
   shoulder: {fileID: 6848631196143784806}
   lineRenderer: {fileID: 8404414056592739591}
+  photonView: {fileID: 0}
 --- !u!120 &8404414056592739591
 LineRenderer:
   serializedVersion: 2
@@ -256,6 +258,7 @@ GameObject:
   - component: {fileID: 4128148918248674495}
   - component: {fileID: 6848631196143784806}
   - component: {fileID: 7161265638002427928}
+  - component: {fileID: 5764450627643541480}
   m_Layer: 0
   m_Name: Shoulder
   m_TagString: Untagged
@@ -408,9 +411,25 @@ FixedJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: -0.53, y: -0.01}
+  m_ConnectedAnchor: {x: 0.53, y: -0.01}
   m_DampingRatio: 0
   m_Frequency: 0
+--- !u!114 &5764450627643541480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3459818829435773542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &8530601862243637242
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,8 +442,8 @@ GameObject:
   - component: {fileID: 1199365806926228401}
   - component: {fileID: 6695616326140135341}
   - component: {fileID: 7455989874689952756}
-  - component: {fileID: 2186549114499794078}
   - component: {fileID: 3508586046504367325}
+  - component: {fileID: 7420728978601767726}
   m_Layer: 0
   m_Name: Hand
   m_TagString: Untagged
@@ -535,22 +554,6 @@ HingeJoint2D:
   m_AngleLimits:
     m_LowerAngle: 0
     m_UpperAngle: 359
---- !u!114 &2186549114499794078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8530601862243637242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b95b2f9573686a64cbe4e5d11d664865, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementForce: 20
-  maxForce: 10
-  input: {fileID: 3508586046504367325}
-  rb: {fileID: 1199365806926228401}
 --- !u!114 &3508586046504367325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,3 +571,19 @@ MonoBehaviour:
   back: 115
   right: 100
   left: 97
+--- !u!114 &7420728978601767726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8530601862243637242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
