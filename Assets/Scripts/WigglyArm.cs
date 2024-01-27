@@ -24,10 +24,11 @@ public class WigglyArm : MonoBehaviour, IPunObservable
 
     [SerializeField] private PhotonView photonView;
 
+    
     Vector3[] points; // For the line renderer
     List<Rigidbody2D> sections = new();
 
-    private void Awake()
+    private void Start()
     {
         SetLength(armLength);
     }
