@@ -24,7 +24,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
     public PhotonView photonView;
 
-    private static Dictionary<string, float> damageDealt;
+    private static Dictionary<string, float> damageDealt = new();
     public UnityEvent OnTickled;
 
     void Start()
