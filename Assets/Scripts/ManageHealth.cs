@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
@@ -17,8 +18,12 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
     private float health;
     private bool dead;
-    private bool healthChanged;
+    private float healthRecovered = 0.0f;
     private Coroutine cooldownBeforeStartHealRunner;
+
+    public PhotonView photonView;
+
+    private static Dictionary<string, float> damageDealt;
 
     void Start()
     {
@@ -32,17 +37,22 @@ public class ManageHealth : MonoBehaviour, IPunObservable
             return;
 
         health -= damage;
+
+        damageDealt.TryAdd(photonView.Controller.NickName, 0.0f);
+        damageDealt[photonView.Controller.NickName] += damage;
+
         RefreshHealth();
 
-        healthChanged = true;
+        if (photonView.IsMine)
+        {
+            if (health < 0.0f)
+                Die();
 
-        if (health < 0.0f)
-            Die();
+            if (cooldownBeforeStartHealRunner != null)
+                StopCoroutine(cooldownBeforeStartHealRunner);
 
-        if(cooldownBeforeStartHealRunner != null)
-            StopCoroutine(cooldownBeforeStartHealRunner);
-
-        cooldownBeforeStartHealRunner = StartCoroutine(CooldownBeforeHeal());
+            cooldownBeforeStartHealRunner = StartCoroutine(CooldownBeforeHeal());
+        }
     }
 
     private void Die()
@@ -57,24 +67,42 @@ public class ManageHealth : MonoBehaviour, IPunObservable
         
         // Make the fill the correct size and placement
         fill.localScale = new Vector3(1, healthPercent, 1);
-        fill.localPosition = new Vector3(0,  -0.5f + (healthPercent / 2f), 0);
+        fill.localPosition = new Vector3(0, -0.5f + (healthPercent / 2f), 0);
 
         renderer.color = Color.Lerp(startColor, endColor, healthPercent); // Interpolate color from white to orange
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsReading && stream.Count > 0)
+        if(stream.IsWriting)
         {
-            health = (float)stream.ReceiveNext();
-            RefreshHealth();
-        }
+            stream.SendNext(healthRecovered);
+            healthRecovered = 0;
+            stream.SendNext(damageDealt.Count);
+            foreach(var pair in damageDealt)
+            {
+                stream.SendNext(pair.Key);
+                stream.SendNext(pair.Value);
+            }
+            damageDealt.Clear();
+        } 
         else
         {
-            if (healthChanged)
+            health += (float)stream.ReceiveNext();
+
+            var players = GameObject.FindGameObjectsWithTag("Player");
+            int numDamagedPlayers = (int)stream.ReceiveNext();
+            for(int i = 0; i < numDamagedPlayers; i++)
             {
-                stream.SendNext(health);
-                healthChanged = false;
+                var name = (string)stream.ReceiveNext();
+                var damage = (float)stream.ReceiveNext();
+                foreach( var p in players)
+                {
+                    if(p.GetComponent<PhotonView>().Controller.NickName == name)
+                    {
+                        p.GetComponentInChildren<ManageHealth>().Damage(damage);
+                    }
+                }
             }
         }
     }
@@ -86,8 +114,12 @@ public class ManageHealth : MonoBehaviour, IPunObservable
         //Health regen loop
         while (health < maxHealth)
         {
-            health += Time.deltaTime * regenSpeed;
+            float healAmount = Time.deltaTime * regenSpeed;
+
+            health += healAmount;
+            healthRecovered += healAmount;
             RefreshHealth();
+
             yield return null; // Wait for next frame
         }
     }

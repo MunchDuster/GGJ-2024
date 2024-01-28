@@ -52,7 +52,7 @@ public class TickleListener : MonoBehaviour
                 OnTickle.Invoke();
 
             Debug.Log("TICKLE TICKLE");
-            health.Damage(damagePerTickle); //Apply damage
+            health.Damage(damagePerTickle * Time.deltaTime); //Apply damage
             StartCoroutine(RunCooldown()); //Begin cooldown
         }
     }
