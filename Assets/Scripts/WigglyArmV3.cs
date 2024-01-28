@@ -82,7 +82,6 @@ public class WigglyArmV3 : MonoBehaviour, IPunObservable
 
 
             Vector2 handPos = (Vector2)stream.ReceiveNext();
-            Debug.Log($"HAND POS HERE {handPos}");
             hand.position = handPos; 
 
             UpdateLineRenderer();

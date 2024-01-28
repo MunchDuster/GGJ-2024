@@ -33,7 +33,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
         RefreshHealth();
     }
 
-    public void Damage(float damage)
+    public void Damage(float damage, bool trackDamage = true)
     {
         if (dead)
             return;
@@ -41,7 +41,9 @@ public class ManageHealth : MonoBehaviour, IPunObservable
         health -= damage;
 
         damageDealt.TryAdd(photonView.Controller.NickName, 0.0f);
-        damageDealt[photonView.Controller.NickName] += damage;
+        if (trackDamage) {
+            damageDealt[photonView.Controller.NickName] += damage;
+        }
 
         RefreshHealth();
         OnTickled.Invoke();
@@ -79,11 +81,14 @@ public class ManageHealth : MonoBehaviour, IPunObservable
     {
         if(stream.IsWriting)
         {
+            Debug.Log($"Player object {photonView.Controller.NickName} is sending");
+
             stream.SendNext(healthRecovered);
             healthRecovered = 0;
             stream.SendNext(damageDealt.Count);
             foreach(var pair in damageDealt)
             {
+                Debug.Log($"Player object {photonView.Controller.NickName} is sending {pair.Key}, {pair.Value}");
                 stream.SendNext(pair.Key);
                 stream.SendNext(pair.Value);
             }
@@ -91,6 +96,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
         } 
         else
         {
+            Debug.Log($"Player object {photonView.Controller.NickName} is receiving");
             health += (float)stream.ReceiveNext();
 
             var players = GameObject.FindGameObjectsWithTag("Player");
@@ -103,7 +109,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
                 {
                     if(p.GetComponent<PhotonView>().Controller.NickName == name)
                     {
-                        p.GetComponentInChildren<ManageHealth>().Damage(damage);
+                        p.GetComponentInChildren<ManageHealth>().Damage(damage, false);
                     }
                 }
             }
