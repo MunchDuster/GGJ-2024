@@ -1275,7 +1275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4847648134079166557, guid: 17c43b7f6b227a6408392e1fd0ffc3fb, type: 3}
       propertyPath: maxHealth
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4847648134079166557, guid: 17c43b7f6b227a6408392e1fd0ffc3fb, type: 3}
       propertyPath: photonView
