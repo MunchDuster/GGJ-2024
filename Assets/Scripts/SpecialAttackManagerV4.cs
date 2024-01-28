@@ -24,7 +24,7 @@ public class SpecialAttackManagerV4 : MonoBehaviour
     {
         if(Input.GetKeyUp(KeyCode.Space))
         {
-            LaunchFistAttack();
+            StartBigHand();
         }
     }
 
