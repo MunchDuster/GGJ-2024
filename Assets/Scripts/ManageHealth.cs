@@ -1,3 +1,4 @@
+using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 
@@ -6,19 +7,21 @@ using UnityEngine;
 /// </summary>
 public class ManageHealth : MonoBehaviour, IPunObservable
 {
-    public float health;
+    public float regenSpeed = 1.0f;
+    public float cooldownBeforeStartHeal = 3;
     public float maxHealth = 5.0f;
     public Transform fill;
     public SpriteRenderer renderer;
     public Color startColor = Color.white;
     public Color endColor = new Color(1.0f, 0.5f, 0.0f);
 
-    private bool hasChanged;
+    private float health;
     private bool dead;
+    private Coroutine cooldownBeforeStartHealRunner;
 
     void Start()
     {
-        hasChanged = true;
+        health = maxHealth;
         RefreshHealth();
     }
 
@@ -32,6 +35,11 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
         if (health < 0.0f)
             Die();
+
+        if(cooldownBeforeStartHealRunner != null)
+            StopCoroutine(cooldownBeforeStartHealRunner);
+
+        cooldownBeforeStartHealRunner = StartCoroutine(CooldownBeforeHeal());
     }
 
     private void Die()
@@ -41,7 +49,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
     private void RefreshHealth()
     {
-        float healthPercent = health / maxHealth;
+        float healthPercent = Mathf.Clamp01(health / maxHealth);
         
         // Make the fill the correct size and placement
         fill.localScale = new Vector3(1, healthPercent, 1);
@@ -60,6 +68,19 @@ public class ManageHealth : MonoBehaviour, IPunObservable
         else
         {
             stream.SendNext(health);
+        }
+    }
+
+    private IEnumerator CooldownBeforeHeal()
+    {
+        yield return new WaitForSeconds(cooldownBeforeStartHeal);
+        
+        //Health regen loop
+        while (health < maxHealth)
+        {
+            health += Time.deltaTime * regenSpeed;
+            RefreshHealth();
+            yield return null; // Wait for next frame
         }
     }
 }

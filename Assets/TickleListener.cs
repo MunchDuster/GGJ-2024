@@ -14,25 +14,35 @@ public class TickleListener : MonoBehaviour
 
     private void Start()
     {
-        if (!photonView.IsMine)
+        if (photonView && !photonView.IsMine)
             Destroy(this);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        TryDamage(collision.collider.gameObject);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        TryDamage(collision.collider.gameObject);
+    }
+
+    private void TryDamage(GameObject other)
+    {
         if (isCooldown)
             return;
 
-        GameObject other = collision.collider.gameObject;
         if (other.tag == playerTag) // Check if colliding with player
         {
             if (other == myPlayer)
                 return; //Dont tickle self
 
-            ManageHealth health = other.GetComponent<ManageHealth>(); // Find the health script
+            ManageHealth health = other.GetComponentInChildren<ManageHealth>(); // Find the health script
             if (!health)
                 Debug.LogError("NO HEALTH ON PLAYER");
 
+            Debug.Log("TICKLE TICKLE");
             health.Damage(damagePerTickle); //Apply damage
             StartCoroutine(RunCooldown()); //Begin cooldown
         }
