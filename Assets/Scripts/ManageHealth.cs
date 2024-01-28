@@ -1,6 +1,7 @@
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// For players
@@ -20,6 +21,8 @@ public class ManageHealth : MonoBehaviour, IPunObservable
     private bool healthChanged;
     private Coroutine cooldownBeforeStartHealRunner;
 
+    public UnityEvent OnTickled;
+
     void Start()
     {
         health = maxHealth;
@@ -33,6 +36,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
         health -= damage;
         RefreshHealth();
+        OnTickled.Invoke();
 
         healthChanged = true;
 
