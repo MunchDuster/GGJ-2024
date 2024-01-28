@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class KeyboardInputter : Inputter
 {
-    [SerializeField] private KeyCode forward;
-    [SerializeField] private KeyCode back;
-    [SerializeField] private KeyCode right;
-    [SerializeField] private KeyCode left;
+    [SerializeField] private string forward;
+    [SerializeField] private string back;
+    [SerializeField] private string right;
+    [SerializeField] private string left;
 
     private void Update()
     {
@@ -15,5 +15,5 @@ public class KeyboardInputter : Inputter
             );
     }
 
-    private int GetKey(KeyCode keyCode) => Input.GetKey(keyCode) ? 1 : 0;
+    private int GetKey(string keyCode) => Input.GetKey(keyCode) ? 1 : 0;
 }

@@ -37,8 +37,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8645075787208425827}
   - {fileID: 7548860582990178871}
+  - {fileID: 8645075787208425827}
   - {fileID: 8058479091506293170}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -272,19 +272,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: back
-      value: 0
+      value: s
       objectReference: {fileID: 0}
     - target: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: left
-      value: 0
+      value: a
       objectReference: {fileID: 0}
     - target: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: right
-      value: 0
+      value: d
       objectReference: {fileID: 0}
     - target: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: forward
-      value: 0
+      value: w
       objectReference: {fileID: 0}
     - target: {fileID: 4387566142706070150, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: player
@@ -521,19 +521,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: back
-      value: 0
+      value: k
       objectReference: {fileID: 0}
     - target: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: left
-      value: 0
+      value: j
       objectReference: {fileID: 0}
     - target: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: right
-      value: 0
+      value: l
       objectReference: {fileID: 0}
     - target: {fileID: 3508586046504367325, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: forward
-      value: 0
+      value: i
       objectReference: {fileID: 0}
     - target: {fileID: 4387566142706070150, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: player
