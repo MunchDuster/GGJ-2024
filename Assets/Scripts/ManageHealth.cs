@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// For players
@@ -24,6 +25,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
     public PhotonView photonView;
 
     private static Dictionary<string, float> damageDealt;
+    public UnityEvent OnTickled;
 
     void Start()
     {
@@ -42,6 +44,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
         damageDealt[photonView.Controller.NickName] += damage;
 
         RefreshHealth();
+        OnTickled.Invoke();
 
         if (photonView.IsMine)
         {
