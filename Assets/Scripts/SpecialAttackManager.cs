@@ -30,7 +30,8 @@ public class SpecialAttackManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Space))
+        return;
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             LaunchFistAttack();
         }

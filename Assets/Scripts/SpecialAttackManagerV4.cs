@@ -28,14 +28,7 @@ public class SpecialAttackManagerV4 : MonoBehaviour
         }
     }
 
-    private void UpdateHand(Vector2 next)
-    {
-        Debug.Log($"Updated hand to pos {next}");
-        wiggleArm.hand.position = next;   
-    }
-
-
-    public bool cancelled;
+    public bool cancelled = false;
     public void CancelAttack()
     {
         cancelled = true;
@@ -46,32 +39,36 @@ public class SpecialAttackManagerV4 : MonoBehaviour
         Rigidbody2D hand = wiggleArm.hand;
         hand.GetComponent<HingeJoint2D>().connectedBody = null;
         hand.GetComponent<NetworkedMovement>().enabled = false;
-        
+        var direction = hand.transform.up;
+
         float t = 0;
         while (t < forceTime && !cancelled) {
-            hand.AddForce(hand.transform.up * force);
+            hand.AddForce(direction * force);
             yield return null;
             t += Time.deltaTime;
         }
 
         t = 0;
         while (t < driftTime && !cancelled) {
+            Debug.Log($"Drift position {hand.transform.position}");
             yield return null;
             t += Time.deltaTime;
         }
-        var finalPos = hand.position;
-
+        var finalPos = hand.transform.position;
+        Debug.Log($"Final position {hand.transform.position}");
         t = 0;
         while (t < forceTime)
         {
             var targetPos = wiggleArm.GetTargetHandPos();
-            hand.position = Vector2.Lerp(finalPos, targetPos, t / forceTime);
+            Debug.Log($"Last position {hand.transform.position}");
+            hand.transform.position = Vector2.Lerp(finalPos, targetPos, t / forceTime);
+            Debug.Log($"Set position {hand.transform.position}");
             yield return null;
             t += Time.deltaTime;
         }
 
         var target = wiggleArm.GetTargetHandPos();
-        hand.position = target;
+        hand.transform.position = target;
         hand.GetComponent<HingeJoint2D>().connectedBody = wiggleArm.arm.Last();
         hand.GetComponent<NetworkedMovement>().enabled = true;
         cancelled = false;
@@ -93,5 +90,24 @@ public class SpecialAttackManagerV4 : MonoBehaviour
         }
         cancelled = false;
         runningAttack = StartCoroutine(FistAttack(fistAttackStrength, fistAttackForceTime, fistAttackDriftTime, fistAttackRetractTime));
+    }
+
+    public IEnumerator CoBigHand(float time, float bigness)
+    {
+        wiggleArm.hand.transform.localScale = Vector3.one * bigness;
+        yield return new WaitForSeconds(time);
+        wiggleArm.hand.transform.localScale = Vector3.one;
+        yield break;
+    }
+
+
+    Coroutine bigHand;
+    public float bigHandTime = 10.0f;
+    public float bigHandBigness = 3;
+    public void StartBigHand()
+    {
+        if(bigHand != null)
+            StopCoroutine(bigHand);
+        bigHand = StartCoroutine(CoBigHand(bigHandTime, bigHandBigness));
     }
 }
