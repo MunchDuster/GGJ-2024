@@ -22,10 +22,7 @@ public class SpecialAttackManagerV4 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Space))
-        {
-            StartBigHand();
-        }
+
     }
 
     public bool cancelled = false;
