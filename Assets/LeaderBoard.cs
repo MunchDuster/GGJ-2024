@@ -22,7 +22,7 @@ public class LeaderBoard : MonoBehaviour
         string leaders = "";
 
         for (int i = 0; i < Mathf.Min(5, leadersNames.Length); i++)
-            leaders += $"{i + 1}. {leadersNames[i]}";
+            leaders += $"{i + 1}. {leadersNames[i]}\n";
 
         text.text = leaders;
     }

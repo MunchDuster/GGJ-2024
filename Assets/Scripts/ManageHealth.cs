@@ -17,6 +17,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
     private float health;
     private bool dead;
+    private bool healthChanged;
     private Coroutine cooldownBeforeStartHealRunner;
 
     void Start()
@@ -32,6 +33,8 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
         health -= damage;
         RefreshHealth();
+
+        healthChanged = true;
 
         if (health < 0.0f)
             Die();
@@ -60,14 +63,18 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsReading)
+        if (stream.IsReading && stream.Count > 0)
         {
             health = (float)stream.ReceiveNext();
             RefreshHealth();
         }
         else
         {
-            stream.SendNext(health);
+            if (healthChanged)
+            {
+                stream.SendNext(health);
+                healthChanged = false;
+            }
         }
     }
 
