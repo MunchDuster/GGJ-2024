@@ -654,6 +654,8 @@ MonoBehaviour:
   fistAttackForceTime: 0.2
   fistAttackDriftTime: 0.3
   fistAttackRetractTime: 1
+  bigHandTime: 10
+  bigHandBigness: 3
 --- !u!4 &4122741127846973437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3477945581961116846, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
@@ -956,6 +958,8 @@ MonoBehaviour:
   fistAttackForceTime: 0.2
   fistAttackDriftTime: 0.3
   fistAttackRetractTime: 1
+  bigHandTime: 10
+  bigHandBigness: 3
 --- !u!50 &5278919977052097377 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 6848631196143784806, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}

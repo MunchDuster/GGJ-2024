@@ -47,6 +47,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
     private void Die()
     {
+        PhotonNetwork.LeaveRoom();
         Debug.Log("DEAD");
     }
 
