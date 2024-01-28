@@ -49,7 +49,7 @@ public class ManageHealth : MonoBehaviour, IPunObservable
 
     private void RefreshHealth()
     {
-        float healthPercent = Mathf.Clamp01(health / maxHealth);
+        float healthPercent = 1 - Mathf.Clamp01(health / maxHealth); // More health = lower bar
         
         // Make the fill the correct size and placement
         fill.localScale = new Vector3(1, healthPercent, 1);
