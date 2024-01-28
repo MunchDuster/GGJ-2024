@@ -1,6 +1,7 @@
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TickleListener : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class TickleListener : MonoBehaviour
     [SerializeField] private string playerTag;
     [SerializeField] private float damagePerTickle = 0.2f;
     [SerializeField] private float cooldown = 0.2f;
+
+    public UnityEvent OnTickle;
 
     private bool isCooldown;
 
@@ -40,7 +43,13 @@ public class TickleListener : MonoBehaviour
 
             ManageHealth health = other.GetComponentInChildren<ManageHealth>(); // Find the health script
             if (!health)
+            {
                 Debug.LogError("NO HEALTH ON PLAYER");
+                return;
+            }
+
+            if (OnTickle != null)
+                OnTickle.Invoke();
 
             Debug.Log("TICKLE TICKLE");
             health.Damage(damagePerTickle); //Apply damage

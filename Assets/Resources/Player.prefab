@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2339498154383008640}
   - component: {fileID: 9176253053770076391}
   - component: {fileID: -434487998724261701}
+  - component: {fileID: 5877117522310318045}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -177,6 +178,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 2339498154383008640}
   - {fileID: 9176253053770076391}
+  - {fileID: 5877117522310318045}
   - {fileID: 6346506212189006717}
   - {fileID: 2160474566310675327}
   - {fileID: 3299781856066341723}
@@ -240,6 +242,20 @@ MonoBehaviour:
   bodyBias: 0.7
   leftHand: {fileID: 4122741127846973437}
   rightHand: {fileID: 2741954529460626601}
+--- !u!114 &5877117522310318045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257643096024042780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e3f29cf6984237479f6301eb310a80c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  photonView: {fileID: 2426609615787569248}
+  score: 0
 --- !u!1 &3683739668505791866
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,6 +508,34 @@ PrefabInstance:
     - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: damagePerTickle
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5877117522310318045}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AddScore
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ScoreManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7039195033673390436, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -751,6 +795,34 @@ PrefabInstance:
     - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: damagePerTickle
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5877117522310318045}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AddScore
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ScoreManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030542329576583244, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
+      propertyPath: OnTickle.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7039195033673390436, guid: 69144e645c64fdb4b9b98f538b71d44e, type: 3}
       propertyPath: m_LocalPosition.x
