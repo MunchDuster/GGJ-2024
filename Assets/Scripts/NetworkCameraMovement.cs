@@ -46,8 +46,6 @@ public class NetworkCameraMovement : MonoBehaviour
 	// Cache for camera offset
 	Vector3 cameraOffset = Vector3.back;
 
-
-
     [Tooltip("The player photon view")]
     [SerializeField]
     private PhotonView photonView;
@@ -98,8 +96,6 @@ public class NetworkCameraMovement : MonoBehaviour
 	/// </summary>
 	public void OnStartFollowing()
 	{
-		leftHand = transform.GetChild(0).GetChild(0);
-        rightHand = transform.GetChild(1).GetChild(0);
         cameraTransform = Camera.main.transform;
 		isFollowing = true;
 		// we don't smooth anything, we go straight to the right camera shot
