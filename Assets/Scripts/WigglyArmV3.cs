@@ -147,12 +147,6 @@ public class WigglyArmV3 : MonoBehaviour, IPunObservable
         joint.useMotor = false;
     }
 
-    private void DestroySection(Rigidbody2D section)
-    {
-        Destroy(section.gameObject);
-    }
-
-
     private void OnDrawGizmos()
     {
         if (arm.Count > 0)
